@@ -15,5 +15,6 @@ namespace Senai_SP_Medical_Group_WebAPI.Domains
         public DateTime DataInclusao { get; set; }
 
         public virtual Usuario IdUsuarioNavigation { get; set; }
+        public string MimeType { get; internal set; }
     }
 }

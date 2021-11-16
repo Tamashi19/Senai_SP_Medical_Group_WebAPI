@@ -8,11 +8,19 @@ namespace Senai_SP_Medical_Group_WebAPI.Interfaces
 {
     interface IClinicaRepository
     {
-        Clinica BucarPorID(short idClinica);
-        List<Clinica> ListarTodos();
-        void Cadastar(Clinica NovaClinica);
-        void Atualizar(short idClinica, Clinica ClinicaAtualizada);
-        void Deletar(short idClinica);
+        void CadastrarClinica(Clinica novaClinica);
+
+
+        void Atualizar(int id, Clinica attClinica);
+
+
+        List<Clinica> ListarTodas();
+
+
+        void Deletar(int id);
+
+
+        Clinica BuscarClinica(int id);
 
     }
 }

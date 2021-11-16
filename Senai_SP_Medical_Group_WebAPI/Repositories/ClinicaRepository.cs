@@ -1,4 +1,6 @@
-﻿using Senai_SP_Medical_Group_WebAPI.Domains;
+﻿using Microsoft.EntityFrameworkCore;
+using Senai_SP_Medical_Group_WebAPI.Contexts;
+using Senai_SP_Medical_Group_WebAPI.Domains;
 using Senai_SP_Medical_Group_WebAPI.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -9,29 +11,49 @@ namespace Senai_SP_Medical_Group_WebAPI.Repositories
 {
     public class ClinicaRepository : IClinicaRepository
     {
-        public void Atualizar(short idClinica, Clinica ClinicaAtualizada)
+        SP_MedicalContext ctx = new SP_MedicalContext();
+
+        public void Atualizar(int id, Clinica attClinica)
         {
-            throw new NotImplementedException();
+            Clinica clinicaBuscada = BuscarClinica(id);
+            if (attClinica.Endereço != null || attClinica.Cnpj != null || attClinica.NomeClinica!= null || attClinica.RazaoSocial != null)
+            {
+                clinicaBuscada.Endereço = attClinica.Endereço;
+                clinicaBuscada.Cnpj = attClinica.Cnpj;
+                clinicaBuscada.NomeClinica = attClinica.NomeClinica;
+                clinicaBuscada.RazaoSocial = attClinica.RazaoSocial;
+
+                ctx.Clinicas.Update(clinicaBuscada);
+
+                ctx.SaveChanges();
+            }
         }
 
-        public Clinica BucarPorID(short idClinica)
+        public Clinica BuscarClinica(int id)
         {
-            throw new NotImplementedException();
+            return ctx.Clinicas.FirstOrDefault(c => c.IdClinica == id);
         }
 
-        public void Cadastar(Clinica NovaClinica)
+        public void CadastrarClinica(Clinica novaClinica)
         {
-            throw new NotImplementedException();
+            ctx.Clinicas.Add(novaClinica);
+
+            ctx.SaveChanges();
         }
 
-        public void Deletar(short idClinica)
+        public void Deletar(int id)
         {
-            throw new NotImplementedException();
+            ctx.Clinicas.Remove(BuscarClinica(id));
+
+            ctx.SaveChanges();
         }
 
-        public List<Clinica> ListarTodos()
+        public List<Clinica> ListarTodas()
         {
-            throw new NotImplementedException();
+            return ctx.Clinicas
+                    .AsNoTracking()
+                    .Include(c => c.Medicos)
+                    .ToList();
         }
     }
 }

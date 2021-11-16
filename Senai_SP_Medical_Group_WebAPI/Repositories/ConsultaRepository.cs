@@ -1,4 +1,6 @@
-﻿using Senai_SP_Medical_Group_WebAPI.Domains;
+﻿using Microsoft.EntityFrameworkCore;
+using Senai_SP_Medical_Group_WebAPI.Contexts;
+using Senai_SP_Medical_Group_WebAPI.Domains;
 using Senai_SP_Medical_Group_WebAPI.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -9,39 +11,176 @@ namespace Senai_SP_Medical_Group_WebAPI.Repositories
 {
     public class ConsultaRepository : IConsultaRepository
     {
-        public void AtualizarUrl(short id, Consultum consultaAtualizada)
+        SP_MedicalContext ctx = new SP_MedicalContext();
+        public void AlterarDescricao(string descricao, int id)
         {
-            throw new NotImplementedException();
+            Consultum consultaBuscado = BuscarPorId(id);
+
+            if (descricao != null)
+            {
+                consultaBuscado.Descricao = descricao;
+
+                ctx.Consulta.Update(consultaBuscado);
+
+                ctx.SaveChanges();
+            };
+
         }
 
-        public Consultum BuscarPorId(short id)
+        public void CadastrarConsulta(Consultum novaConsulta)
         {
-            throw new NotImplementedException();
+
+            novaConsulta.Descricao = "";
+            novaConsulta.IdSituacao = 2;
+
+            ctx.Consulta.Add(novaConsulta);
+
+            ctx.SaveChanges();
+
         }
 
-        public void Cadastrar(Consultum novaConsulta)
+        public Consultum BuscarPorId(int id)
         {
-            throw new NotImplementedException();
+            return ctx.Consulta.FirstOrDefault(u => u.IdConsulta == id);
         }
 
-        public void Deletar(short id)
+        public void CancelarConsulta(int Id)
         {
-            throw new NotImplementedException();
+            Consultum consultaBuscada = BuscarPorId(Id);
+
+            consultaBuscada.IdSituacao = 3;
+            consultaBuscada.Descricao = "Consulta Cancelada!";
+
+            ctx.Consulta.Update(consultaBuscada);
+            ctx.SaveChanges();
+
         }
 
-        public List<Consultum> ListarMinhas(short id, short idTipo)
+        public List<Consultum> ListarMinhasConsultas(int id, int idTipo)
         {
-            throw new NotImplementedException();
+            if (idTipo == 3)
+            {
+                Medico medico = ctx.Medicos.FirstOrDefault(u => u.IdUsuario == id);
+
+                int idMedico = medico.IdMedico;
+
+                return ctx.Consulta
+                                .Where(c => c.IdMedico == idMedico)
+                                .AsNoTracking()
+                                .Select(p => new Consultum()
+                                {
+                                    DataConsulta = p.DataConsulta,
+                                    IdConsulta = p.IdConsulta,
+                                    IdMedicoNavigation = new Medico()
+                                    {
+                                        Crm = p.IdMedicoNavigation.Crm,
+                                        IdUsuarioNavigation = new Usuario()
+                                        {
+                                            Email = p.IdMedicoNavigation.IdUsuarioNavigation.Email
+                                        }
+                                    },
+                                    IdPacienteNavigation = new Paciente()
+                                    {
+                                        Cpf = p.IdPacienteNavigation.Cpf,
+                                        Telefone = p.IdPacienteNavigation.Telefone,
+                                        IdUsuarioNavigation = new Usuario()
+                                        {
+                                            Email = p.IdPacienteNavigation.IdUsuarioNavigation.Email
+                                        }
+                                    },
+                                    IdSituacaoNavigation = new Situacao()
+                                    {
+                                        Situacao1 = p.IdSituacaoNavigation.Situacao1
+                                    }
+
+
+                                })
+                                .ToList();
+            }
+            else if (idTipo == 2)
+            {
+                Paciente paciente = ctx.Pacientes.FirstOrDefault(u => u.IdUsuario == id);
+
+                int idPaciente = paciente.IdPaciente;
+                return ctx.Consulta
+                                .Where(c => c.IdConsulta == idPaciente)
+                                .AsNoTracking()
+                                .Select(p => new Consultum()
+                                {
+                                    DataConsulta = p.DataConsulta,
+                                    IdConsulta = p.IdConsulta,
+                                    IdMedicoNavigation = new Medico()
+                                    {
+                                        Crm = p.IdMedicoNavigation.Crm,
+                                        IdUsuarioNavigation = new Usuario()
+                                        {
+                                            Email = p.IdMedicoNavigation.IdUsuarioNavigation.Email
+                                        }
+                                    },
+                                    IdPacienteNavigation = new Paciente()
+                                    {
+                                        Cpf = p.IdPacienteNavigation.Cpf,
+                                        Telefone = p.IdPacienteNavigation.Telefone,
+                                        IdUsuarioNavigation = new Usuario()
+                                        {
+                                            Email = p.IdPacienteNavigation.IdUsuarioNavigation.Email
+                                        }
+                                    },
+                                    IdSituacaoNavigation = new Situacao()
+                                    {
+                                        Situacao1 = p.IdSituacaoNavigation.Situacao1
+                                    }
+
+
+                                })
+                                .ToList();
+            }
+
+            return null;
+
         }
 
-        public void mudarDescricao(short id, string descricao)
+
+
+        public List<Consultum> ListarTodas()
         {
-            throw new NotImplementedException();
+            return ctx.Consulta
+                .Select(p => new Consultum()
+                {
+                    DataConsulta = p.DataConsulta,
+                    IdConsulta = p.IdConsulta,
+                    IdMedicoNavigation = new Medico()
+                    {
+                        Crm = p.IdMedicoNavigation.Crm,
+                        IdUsuarioNavigation = new Usuario()
+                        {
+                            Email = p.IdMedicoNavigation.IdUsuarioNavigation.Email
+                        }
+                    },
+                    IdPacienteNavigation = new Paciente()
+                    {
+                        Cpf = p.IdPacienteNavigation.Cpf,
+                        Telefone = p.IdPacienteNavigation.Telefone,
+                        IdUsuarioNavigation = new Usuario()
+                        {
+                            Email = p.IdPacienteNavigation.IdUsuarioNavigation.Email
+                        }
+                    },
+                    IdSituacaoNavigation = new Situacao()
+                    {
+                        Situacao1 = p.IdSituacaoNavigation.Situacao1
+                    }
+
+
+                })
+                .ToList();
         }
 
-        public void mudarSituacao(short idConsulta, short idSituacao)
+        public void RemoverConsultaSistema(int id)
         {
-            throw new NotImplementedException();
+            ctx.Consulta.Remove(BuscarPorId(id));
+            ctx.SaveChanges();
         }
+
     }
 }

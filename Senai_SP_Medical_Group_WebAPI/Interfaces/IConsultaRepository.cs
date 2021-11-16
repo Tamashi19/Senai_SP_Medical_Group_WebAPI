@@ -8,25 +8,24 @@ namespace Senai_SP_Medical_Group_WebAPI.Interfaces
 {
     interface IConsultaRepository
     {
-        
-        void Cadastrar(Consultum novaConsulta);
 
-       
-        void AtualizarUrl(short id, Consultum consultaAtualizada);
+        List<Consultum> ListarTodas();
 
-      
-        void Deletar(short id);
+        List<Consultum> ListarMinhasConsultas(int id, int idTipo);
 
-       
-        List<Consultum> ListarMinhas(short id, short idTipo);
 
-       
-        void mudarDescricao(short id, string descricao);
+        void CadastrarConsulta(Consultum novaConsulta);
 
-       
-        void mudarSituacao(short idConsulta, short idSituacao);
 
-        
-        Consultum BuscarPorId(short id);
+        void CancelarConsulta(int Id);
+
+
+        void RemoverConsultaSistema(int id);
+
+
+        void AlterarDescricao(string descricao, int id);
+
+
+        Consultum BuscarPorId(int id);
     }
 }

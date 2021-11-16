@@ -8,10 +8,20 @@ namespace Senai_SP_Medical_Group_WebAPI.Interfaces
 {
     interface IUsuarioRepository
     {
-        Usuario BucarPorID(short idUsuario);
-        List<Usuario> ListarTodos();
-        void Cadastar(Usuario NovoUsuario);
-        void Atualizar(short idUsuario, Usuario UsuarioAtualizado);
-        void Deletar(short idUsuario);
+        List<Usuario> ListarUsuarios();
+
+        void Cadastrar(Usuario novoUser);
+
+        Usuario Login(string email, string senha);
+
+        void Deletar(int id);
+
+        void SalvarPerfilBD(IFormFile foto, short id);
+
+        string ConsultarPerfilBD(short id);
+
+        Usuario BuscarPorId(int id);
+
+        void Atualizar(int id, Usuario userAtt);
     }
 }
