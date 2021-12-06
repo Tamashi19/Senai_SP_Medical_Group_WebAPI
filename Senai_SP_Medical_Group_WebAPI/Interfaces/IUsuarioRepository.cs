@@ -1,4 +1,5 @@
-﻿using Senai_SP_Medical_Group_WebAPI.Domains;
+﻿using Microsoft.AspNetCore.Http;
+using Senai_SP_Medical_Group_WebAPI.Domains;
 using System;
 using System.Collections.Generic;
 using System.Linq;

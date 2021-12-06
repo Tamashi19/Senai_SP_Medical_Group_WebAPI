@@ -1,4 +1,5 @@
-﻿using Senai_SP_Medical_Group_WebAPI.Contexts;
+﻿using Microsoft.EntityFrameworkCore;
+using Senai_SP_Medical_Group_WebAPI.Contexts;
 using Senai_SP_Medical_Group_WebAPI.Domains;
 using Senai_SP_Medical_Group_WebAPI.Interfaces;
 using System;
@@ -8,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Senai_SP_Medical_Group_WebAPI.Repositories
 {
-    public class PacienteUsuario : IPacienteRepository
+    public class PacienteRepository : IPacienteRepository
     {
+        SP_MedicalContext ctx = new SP_MedicalContext();
         public void Atualizar(int id, Paciente attPaciente)
         {
-            SP_MedicalContext ctx = new SP_MedicalContext();
 
             Paciente pacienteBuscado = BuscarPorId(id);
 
@@ -53,10 +54,11 @@ namespace Senai_SP_Medical_Group_WebAPI.Repositories
         public List<Paciente> ListarTodos()
         {
             return ctx.Pacientes
-                        .AsNoTracking()
                         .Include(p => p.IdUsuarioNavigation)
                         .ToList();
 
         }
     }
 }
+    
+

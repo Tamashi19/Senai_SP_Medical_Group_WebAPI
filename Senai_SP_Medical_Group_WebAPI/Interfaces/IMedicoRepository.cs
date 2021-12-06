@@ -12,3 +12,4 @@ namespace Senai_SP_Medical_Group_WebAPI.Interfaces
 
         void Cadastrar(Medico novoMedico);
     }
+}

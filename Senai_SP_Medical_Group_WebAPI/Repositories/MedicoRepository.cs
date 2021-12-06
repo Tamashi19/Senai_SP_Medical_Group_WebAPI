@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Senai_SP_Medical_Group_WebAPI.Repositories
 {
-    public class MedicoRepositorycs : IMedicoRepository
+    public class MedicoRepository : IMedicoRepository
     {
         SP_MedicalContext ctx = new SP_MedicalContext();
 

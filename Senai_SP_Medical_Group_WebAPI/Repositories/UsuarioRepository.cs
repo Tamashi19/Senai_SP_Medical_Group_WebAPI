@@ -10,112 +10,105 @@ using System.Threading.Tasks;
 
 namespace Senai_SP_Medical_Group_WebAPI.Repositories
 {
-    public class UsuarioRepository : IUsuarioRepository
-    {
+   
+
+        public class UsuarioRepository : IUsuarioRepository
+        {
         SP_MedicalContext ctx = new SP_MedicalContext();
 
-        public void Cadastrar(Usuario novoUser)
-        {
-            ctx.Usuarios.Add(novoUser);
-
-            ctx.SaveChanges();
-        }
-
-        public List<Usuario> ListarUsuarios()
-        {
-            return ctx.Usuarios.ToList();
-        }
-
-        public void Deletar(int id)
-        {
-            ctx.Usuarios.Remove(BuscarPorId(id));
-
-            ctx.SaveChanges();
-        }
-
-        public void Atualizar(int id, Usuario userAtt)
-        {
-            Usuario userBuscado = BuscarPorId(id);
-
-            if (userAtt.Senha != null || userAtt.Email != null)
+         
+            public void Cadastrar(Usuario novoUser)
             {
-                userBuscado.Email = userAtt.Email;
-                userBuscado.Senha = userAtt.Senha;
-
-                ctx.Usuarios.Update(userBuscado);
+                ctx.Usuarios.Add(novoUser);
 
                 ctx.SaveChanges();
             }
 
-        }
-
-        //Fim CRUD
-
-        public Usuario Login(string email, string senha)
-        {
-            return ctx.Usuarios.FirstOrDefault(e => e.Email == email && e.Senha == senha);
-        }
-
-        public void SalvarPerfilBD(IFormFile foto, short id)
-        {
-            ImagemUsuario imagemUsuario = new ImagemUsuario();
-
-            using (var ms = new MemoryStream())
+            public List<Usuario> ListarUsuarios()
             {
-                foto.CopyTo(ms);
-
-                imagemUsuario.Binario = ms.ToArray();
-
-                imagemUsuario.NomeArquivo = foto.FileName;
-                imagemUsuario.MimeType = foto.FileName.Split('.').Last();
-                imagemUsuario.IdUsuario = id;
+                return ctx.Usuarios.ToList();
             }
 
-            ImagemUsuario imagemExistente = new ImagemUsuario();
-            imagemExistente = ctx.ImagemUsuarios.FirstOrDefault(i => i.IdUsuario == id);
-
-            if (imagemExistente != null)
+            public void Deletar(int id)
             {
-                imagemExistente.Binario = imagemUsuario.Binario;
-                imagemExistente.NomeArquivo = imagemUsuario.NomeArquivo;
-                imagemExistente.MimeType = imagemUsuario.MimeType;
-                imagemExistente.IdUsuario = id;
+                ctx.Usuarios.Remove(BuscarPorId(id));
 
-                ctx.ImagemUsuarios.Update(imagemExistente);
-            }
-            else
-            {
-                ctx.ImagemUsuarios.Add(imagemUsuario);
+                ctx.SaveChanges();
             }
 
-            ctx.SaveChanges();
-        }
-
-        public string ConsultarPerfilBD(short id)
-        {
-            ImagemUsuario imagemUsuario = new ImagemUsuario();
-            imagemUsuario = ctx.ImagemUsuarios.FirstOrDefault(i => i.IdUsuario == id);
-
-            if (imagemUsuario != null)
+            public void Atualizar(int id, Usuario userAtt)
             {
-                return Convert.ToBase64String(imagemUsuario.Binario);
+                Usuario userBuscado = BuscarPorId(id);
+
+                if (userAtt.Senha != null || userAtt.Email != null)
+                {
+                    userBuscado.Email = userAtt.Email;
+                    userBuscado.Senha = userAtt.Senha;
+
+                    ctx.Usuarios.Update(userBuscado);
+
+                    ctx.SaveChanges();
+                }
+
             }
-            return null;
-        }
 
-        public Usuario BuscarPorId(int id)
-        {
-            return ctx.Usuarios.FirstOrDefault(u => u.IdUsuario == id);
-        }
+           
 
-        public void SalvarPerfilBD(IFormFile foto, short id)
-        {
-            throw new NotImplementedException();
-        }
+            public Usuario Login(string email, string senha)
+            {
+                return ctx.Usuarios.FirstOrDefault(e => e.Email == email && e.Senha == senha);
+            }
 
-        public void SalvarPerfilBD(IFormFile foto, short id)
-        {
-            throw new NotImplementedException();
+            public void SalvarPerfilBD(IFormFile foto, short id)
+            {
+                ImagemUsuario imagemUsuario = new ImagemUsuario();
+
+                using (var ms = new MemoryStream())
+                {
+                    foto.CopyTo(ms);
+
+                    imagemUsuario.Binario = ms.ToArray();
+
+                    imagemUsuario.NomeArquivo = foto.FileName;
+                    imagemUsuario.MimeType = foto.FileName.Split('.').Last();
+                    imagemUsuario.IdUsuario = id;
+                }
+
+                ImagemUsuario imagemExistente = new ImagemUsuario();
+                imagemExistente = ctx.ImagemUsuarios.FirstOrDefault(i => i.IdUsuario == id);
+
+                if (imagemExistente != null)
+                {
+                    imagemExistente.Binario = imagemUsuario.Binario;
+                    imagemExistente.NomeArquivo = imagemUsuario.NomeArquivo;
+                    imagemExistente.MimeType = imagemUsuario.MimeType;
+                    imagemExistente.IdUsuario = id;
+
+                    ctx.ImagemUsuarios.Update(imagemExistente);
+                }
+                else
+                {
+                    ctx.ImagemUsuarios.Add(imagemUsuario);
+                }
+
+                ctx.SaveChanges();
+            }
+
+            public string ConsultarPerfilBD(short id)
+            {
+                ImagemUsuario imagemUsuario = new ImagemUsuario();
+                imagemUsuario = ctx.ImagemUsuarios.FirstOrDefault(i => i.IdUsuario == id);
+
+                if (imagemUsuario != null)
+                {
+                    return Convert.ToBase64String(imagemUsuario.Binario);
+                }
+                return null;
+            }
+
+            public Usuario BuscarPorId(int id)
+            {
+                return ctx.Usuarios.FirstOrDefault(u => u.IdUsuario == id);
+            }
         }
     }
-}
