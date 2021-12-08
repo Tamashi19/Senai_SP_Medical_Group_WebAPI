@@ -42,7 +42,7 @@ namespace Senai_SP_Medical_Group_WebAPI
                         ValidateIssuer = true,
                         ValidateAudience = true,
                         ValidateLifetime = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("Senai_SP_Medical_Group_WebAPI")),
+                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("SP_MEDICAL_GRUOP_TAMASHI")),
                         ClockSkew = TimeSpan.FromMinutes(40),
                         ValidIssuer = "Senai_SP_Medical_Group_WebAPI",
                         ValidAudience = "Senai_SP_Medical_Group_WebAPI"

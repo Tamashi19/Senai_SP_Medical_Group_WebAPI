@@ -18,11 +18,11 @@ namespace Senai_SP_Medical_Group_WebAPI.Controllers
     [ApiController]
     public class ConsultasController : ControllerBase
     {
-        private IConsultaRepository _consultaRepository { get; set; }
+        private IConsultaRepository ConsultaRepository { get; set; }
 
         public ConsultasController()
         {
-            _consultaRepository = new ConsultaRepository();
+            ConsultaRepository = new ConsultaRepository();
         }
 
         [Authorize(Roles = "1")]
@@ -31,7 +31,7 @@ namespace Senai_SP_Medical_Group_WebAPI.Controllers
         {
             try
             {
-                List<Consultum> listaConsultas = _consultaRepository.ListarTodas();
+                List<Consultum> listaConsultas = ConsultaRepository.ListarTodas();
                 if (listaConsultas.Count == 0)
                 {
                     return StatusCode(404, new
@@ -63,7 +63,7 @@ namespace Senai_SP_Medical_Group_WebAPI.Controllers
                         Mensagem = "Os dados informados são inválidos ou estão vazios!"
                     });
                 }
-                _consultaRepository.CadastrarConsulta(novaConsulta);
+                ConsultaRepository.CadastrarConsulta(novaConsulta);
 
                 return StatusCode(201, new
                 {
@@ -93,14 +93,14 @@ namespace Senai_SP_Medical_Group_WebAPI.Controllers
                     });
                 }
 
-                if (_consultaRepository.BuscarPorId(id) == null)
+                if (ConsultaRepository.BuscarPorId(id) == null)
                 {
                     return BadRequest(new
                     {
                         Mensagem = "Não há nenhuma consulta com o ID informado!"
                     });
                 }
-                _consultaRepository.CancelarConsulta(id);
+                ConsultaRepository.CancelarConsulta(id);
 
                 return StatusCode(204, new
                 {
@@ -124,7 +124,7 @@ namespace Senai_SP_Medical_Group_WebAPI.Controllers
 
                 int id = Convert.ToInt32(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);
                 int idTipo = Convert.ToInt32(HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Role).Value);
-                List<Consultum> listaConsulta = _consultaRepository.ListarMinhasConsultas(id, idTipo);
+                List<Consultum> listaConsulta = ConsultaRepository.ListarMinhasConsultas(id, idTipo);
 
                 if (listaConsulta.Count == 0)
                 {
@@ -138,7 +138,7 @@ namespace Senai_SP_Medical_Group_WebAPI.Controllers
                 {
                     return Ok(new
                     {
-                        Mensagem = $"O paciente buscado tem {_consultaRepository.ListarMinhasConsultas(id, idTipo).Count} consultas",
+                        Mensagem = $"O paciente buscado tem {ConsultaRepository.ListarMinhasConsultas(id, idTipo).Count} consultas",
                         listaConsulta
                     });
                 }
@@ -146,7 +146,7 @@ namespace Senai_SP_Medical_Group_WebAPI.Controllers
                 {
                     return Ok(new
                     {
-                        Mensagem = $"O médico buscado tem {_consultaRepository.ListarMinhasConsultas(id, idTipo).Count} consultas",
+                        Mensagem = $"O médico buscado tem {ConsultaRepository.ListarMinhasConsultas(id, idTipo).Count} consultas",
                         listaConsulta
                     });
                 }
@@ -167,7 +167,7 @@ namespace Senai_SP_Medical_Group_WebAPI.Controllers
         {
             try
             {
-                Consultum consultaBuscada = _consultaRepository.BuscarPorId(id);
+                Consultum consultaBuscada = ConsultaRepository.BuscarPorId(id);
                 int idMedico = Convert.ToInt32(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);
                 if (consultaAtt.Descricao == null)
                 {
@@ -188,7 +188,7 @@ namespace Senai_SP_Medical_Group_WebAPI.Controllers
                     });
                 }
 
-                if (_consultaRepository.BuscarPorId(id) == null)
+                if (ConsultaRepository.BuscarPorId(id) == null)
                 {
                     return NotFound(new
                     {
@@ -203,7 +203,7 @@ namespace Senai_SP_Medical_Group_WebAPI.Controllers
                         Mensagem = "Somente o médico pode fazer alterações na descrição"
                     });
                 }
-                _consultaRepository.AlterarDescricao(consultaAtt.Descricao, id);
+                ConsultaRepository.AlterarDescricao(consultaAtt.Descricao, id);
                 return StatusCode(200, new
                 {
                     Mensagem = "Descrição da consulta foi alterada ",
@@ -230,7 +230,7 @@ namespace Senai_SP_Medical_Group_WebAPI.Controllers
                     });
                 }
 
-                if (_consultaRepository.BuscarPorId(id) == null)
+                if (ConsultaRepository.BuscarPorId(id) == null)
                 {
                     return NotFound(new
                     {
@@ -238,7 +238,7 @@ namespace Senai_SP_Medical_Group_WebAPI.Controllers
                     });
                 }
 
-                _consultaRepository.RemoverConsultaSistema(id);
+                ConsultaRepository.RemoverConsultaSistema(id);
 
                 return StatusCode(200, new
                 {
