@@ -58,7 +58,7 @@ namespace Senai_SP_Medical_Group_WebAPI.Repositories
 
         public List<Consultum> ListarMinhasConsultas(int id, int idTipo)
         {
-            if (idTipo == 3)
+            if (idTipo == 2)
             {
                 Medico medico = ctx.Medicos.FirstOrDefault(u => u.IdUsuario == id);
 
@@ -97,7 +97,7 @@ namespace Senai_SP_Medical_Group_WebAPI.Repositories
                                 })
                                 .ToList();
             }
-            else if (idTipo == 2)
+            else if (idTipo == 3)
             {
                 Paciente paciente = ctx.Pacientes.FirstOrDefault(u => u.IdUsuario == id);
 

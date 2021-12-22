@@ -80,8 +80,11 @@ namespace Senai_SP_Medical_Group_WebAPI.Controllers
         }
 
         [Authorize(Roles = "1")]
-        [HttpPatch("Cancelar/{id:int}")]
+        [HttpPatch("Cancelar/{id}")]
         public IActionResult Deletar(int id)
+                  
+
+
         {
             try
             {
@@ -161,7 +164,7 @@ namespace Senai_SP_Medical_Group_WebAPI.Controllers
 
         }
 
-        [Authorize(Roles = "3")]
+        [Authorize(Roles = "2")]
         [HttpPatch("AlterarDescricao/{id}")]
         public IActionResult AlterarDescricao(Consultum consultaAtt, int id)
         {
@@ -196,7 +199,7 @@ namespace Senai_SP_Medical_Group_WebAPI.Controllers
                     });
                 }
 
-                if (consultaBuscada.IdMedico != idMedico)
+                if (consultaBuscada.IdMedico != id)
                 {
                     return BadRequest(new
                     {
@@ -217,7 +220,7 @@ namespace Senai_SP_Medical_Group_WebAPI.Controllers
             }
         }
         [Authorize(Roles = "1")]
-        [HttpDelete("Remover/{id:int}")]
+        [HttpDelete("Remover/{id}")]
         public IActionResult RemoverConsultaSistema(int id)
         {
             try
